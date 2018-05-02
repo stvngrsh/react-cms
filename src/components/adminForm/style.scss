@@ -1,0 +1,10 @@
+.AdminForm {
+    form {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            margin-bottom: 15px;
+        }
+    }
+}

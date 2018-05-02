@@ -81,7 +81,7 @@ class GetQuote extends Component {
     render() {
         console.log('this.state.formOpen :', this.state.formOpen);
         return (
-            <div>
+            <div className="GetQuote">
                 <button onClick={this.openForm} >Contact Us</button>
                 <div>Or Call 1-800-555-5555</div>
                 {this.state.formOpen ? this.renderForm() : ""}

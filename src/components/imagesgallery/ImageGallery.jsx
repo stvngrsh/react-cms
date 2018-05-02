@@ -31,7 +31,7 @@ class ImageGallery extends Component {
         console.log('this.state.images :', this.state.images);
         let images = this.state.images.sort();
         return (
-            <div>
+            <div className="ImageGallery">
                 {images.map((image, i) => {
                     return (
                         <img key={i} src={image} />

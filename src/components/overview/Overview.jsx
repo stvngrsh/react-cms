@@ -33,7 +33,7 @@ class Overview extends Component {
         let logo = this.state.logo;
         let carData = this.props.carData;
         return (
-            <div>
+            <div className="Overview">
                 <img src={ logo } />
                 <div>{ carData.year }<span> { carData.make }</span></div>
                 <div>{ carData.model }</div>
