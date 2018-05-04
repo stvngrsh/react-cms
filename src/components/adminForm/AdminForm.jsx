@@ -10,11 +10,88 @@ class AdminForm extends Component {
             formData: {}
         }
     }
+
+    componentDidMount() {
+        if(this.props.activeCar) {
+            this.setState({formData: this.props.activeCar.data});
+        } else {
+            this.getListItems();
+        }
+    }
     
 
-    handleMessageChange(e, key) {
+    getListItems(){
+        let formData = this.state.formData;
+        let formElements = this.props.formElements;
+        for(let key in formElements) {
+            if(formElements[key].type === "list") {
+                let defaults = formElements[key].default;
+                formData[key] = {};
+                for(let defaultKey in defaults) {
+                    formData[key][defaultKey] = {
+                        name: defaults[defaultKey],
+                        value: ""
+                    }
+                }
+            }
+        }
+        this.setState({formData: formData});
+    }
+    
+    componentDidUpdate(prevProps, prevState) {
+        console.log('this.state :', this.state);
+
+        if(prevProps.formElements !== this.props.formElements) {
+            if(!this.props.activeCar) {
+                this.getListItems();
+            }
+        }
+
+    }
+
+    addListItem(e, key) {
+        e.preventDefault();
+        let currentKeys = Object.keys(this.state.formData[key]);
+        let keyNums = [];
+        currentKeys.forEach(key => {
+            keyNums.push(parseFloat(key));
+        });
+        keyNums.sort((a, b) => {
+            return b - a;
+        });
+        let newKey = 0;
+        if(keyNums.length > 0) {
+            newKey = keyNums[0] + 1;
+        }
+
+        let formData = this.state.formData;
+        formData[key][newKey] = {
+            name: "",
+            value: ""
+        };
+        this.setState({formData: formData});
+    }
+
+    removeListItem(e, key, itemKey) {
+        e.preventDefault();
+        let formData = this.state.formData;
+        delete formData[key][itemKey];
+        this.setState({formData: formData});
+    }
+
+    handleFieldChange(e, key) {
         let formData = this.state.formData;
         formData[key] = e.target.value;
+        this.setState({formData: formData});
+    }
+
+    handleListItemChange(e, key, itemKey, isName) {
+        let formData = this.state.formData;
+        if(isName) {
+            formData[key][itemKey].name = e.target.value;
+        } else {
+            formData[key][itemKey].value = e.target.value;
+        }
         this.setState({formData: formData});
     }
 
@@ -22,21 +99,40 @@ class AdminForm extends Component {
         switch(formElement.type){
             case "number":
                 return (
-                    <input type="text" name={key} value={this.state.formData.key} onChange={e => this.handleMessageChange(e, key)}/>
+                    <input type="text" name={key} key={i} value={this.state.formData[key] || ""} onChange={e => this.handleFieldChange(e, key)}/>
                 );
                 break;
             case "shorttext":
                 return (
-                    <input type="text" name={key} value={this.state.formData.key} onChange={e => this.handleMessageChange(e, key)}/>
+                    <input type="text" name={key} key={i} value={this.state.formData[key] || ""} onChange={e => this.handleFieldChange(e, key)}/>
                 );
                 break;
             case "longtext":
                 return (
-                    <textarea name={key} value={this.state.formData.key} onChange={e => this.handleMessageChange(e, key)}></textarea>
+                    <textarea name={key} key={i} value={this.state.formData[key] || ""} onChange={e => this.handleFieldChange(e, key)}></textarea>
                 );
                 break;
             case "list":
-                let 
+                let listObj = this.state.formData[key];
+                if(listObj) {
+                    let listKeys = Object.keys(listObj);
+                    return (
+                        <div>
+                            <ul>
+                                {listKeys.map((itemKey, itemIndex) => {
+                                    return(
+                                        <li key={itemIndex}>
+                                            <input type="text" className="list-item name" name={key + "-" + itemKey + "-name"} value={this.state.formData[key][itemKey].name || ""} onChange={e => this.handleListItemChange(e, key, itemKey, true)}/>
+                                            <input type="text" className="list-item value" name={key + "-" + itemKey + "-value"} value={this.state.formData[key][itemKey].value || ""} onChange={e => this.handleListItemChange(e, key, itemKey, false)}/>
+                                            <button onClick={e => this.removeListItem(e, key, itemKey)}>Remove</button>
+                                        </li>    
+                                    );
+                                })}
+                            </ul>
+                            <button onClick={e => this.addListItem(e, key)}>Add Item</button>
+                        </div>
+                    );
+                }
                 break;
         }
     }
@@ -56,6 +152,7 @@ class AdminForm extends Component {
                         </label>
                     );
                 })}
+                <button onClick={e => this.props.submitForm(e, this.state.formData)}>{this.props.activeCar ? "Update Car" : "Add New Car"}</button>
                 </form>
             </div>
         );

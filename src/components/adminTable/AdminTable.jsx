@@ -16,12 +16,13 @@ class AdminTable extends PureComponent {
                         let link = '/cars/' + car.id;
                         return (
                             <tr key={i}>
-                                <th>{car.carData.year}</th>
-                                <th>{car.carData.make}</th>
-                                <th>{car.carData.model}</th>
+                                <th>{car.data.year}</th>
+                                <th>{car.data.make}</th>
+                                <th>{car.data.model}</th>
                                 <th>
-                                    <button onClick={e => this.props.editCar(e, i)}>Edit</button>
-                                    <button onClick={e => this.props.deleteCar(e, i)}>Delete</button>
+                                    <button onClick={e => this.props.editCar(e, car)}>Edit</button>
+                                    <button onClick={e => this.props.toggleCar(e, car)}>{car.active ? "Deactivate" : "Activate"}</button>
+                                    <button onClick={e => this.props.deleteCar(e, car)}>Delete</button>
                                 </th>
                             </tr>
                         );

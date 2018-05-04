@@ -12,24 +12,61 @@ class Admin extends Component {
         this.state = {
             cars: [],
             formActive: false,
-            formElements: {}
+            formElements: {},
+            activeCar: false
         }
     }
 
     closeForm = e => {
-        this.setState({formActive: false});
+        this.setState({formActive: false, activeCar: false});
     }
 
     addCar = e => {
         this.setState({formActive: true});
     }
 
-    deleteCar(e, i) {
-
+    deleteCar(e, car) {
+        firebase.database().ref('data-objects/cars/items/' + car.id).update({
+            deleted: true
+        });
     }
     
-    editCar(e, i) {
+    editCar = (e, car) => {
+        this.setState({formActive: true, activeCar: car});
+    }
 
+    toggleCar(e, car) {
+        firebase.database().ref('data-objects/cars/items/' + car.id).update({
+            active: !car.active
+        });
+    }
+
+    submitForm = (e, formData) => {
+        console.log(formData);
+        e.preventDefault();
+        if(this.state.activeCar) {
+            firebase.database().ref('data-objects/cars/items/' + this.state.activeCar.id).update({
+                data: formData
+            }, err => {
+                if(err) {
+                    console.error(err);
+                } else {
+                    this.closeForm();
+                }
+            });
+        } else {
+            firebase.database().ref('data-objects/cars/items').push({
+                active: true,
+                data: formData
+            }, err => {
+                if(err) {
+                    console.error(err);
+                    //TODO: render error here
+                } else {
+                    this.closeForm();
+                }
+            });
+        }
     }
 
     componentDidMount() {
@@ -42,10 +79,13 @@ class Admin extends Component {
 
             let newState = [];
             for(let item in items) {
-                newState.push({
-                    id: item,
-                    carData: items[item]
-                });
+                if(!items[item].deleted) {
+                    newState.push({
+                        id: item,
+                        active: items[item].active,
+                        data: items[item].data
+                    });
+                }
             }
             this.setState({
                 cars: newState,
@@ -63,8 +103,8 @@ class Admin extends Component {
     render() {
         return (
             <div>
-                {!this.state.formActive && <AdminTable addCar={this.addCar} deleteCar={this.deleteCar} editCar={this.editCar} cars={this.state.cars}/>}
-                {this.state.formActive && <AdminForm closeForm={this.closeForm} formElements={this.state.formElements} />}
+                {!this.state.formActive && <AdminTable addCar={this.addCar} toggleCar={this.toggleCar} deleteCar={this.deleteCar} editCar={this.editCar} cars={this.state.cars}/>}
+                {this.state.formActive && <AdminForm closeForm={this.closeForm} formElements={this.state.formElements} submitForm={this.submitForm} activeCar={this.state.activeCar}/>}
             </div>
         );
     }
