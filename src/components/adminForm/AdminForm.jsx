@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './style.scss';
+import firebase from '../../firebase';
 
 class AdminForm extends Component {
 
@@ -7,7 +8,8 @@ class AdminForm extends Component {
         super(props, context);
         
         this.state = {
-            formData: {}
+            formData: {},
+            selectOptions: {}
         }
     }
 
@@ -15,12 +17,40 @@ class AdminForm extends Component {
         if(this.props.activeCar) {
             this.setState({formData: this.props.activeCar.data});
         } else {
-            this.getListItems();
+            this.setListItems();
+        }
+        this.setSelectOptions();
+    }
+
+    setSelectOptions() {
+        let formElements = this.props.formElements;
+        for (let key in formElements) {
+            if(formElements[key].type === 'dataObject') {
+                let dataObject = formElements[key].dataObject;
+
+                const dataObjects = firebase.database().ref('data-objects/' + dataObject);
+                dataObjects.on('value', (snapshot) => {
+                    let data = snapshot.val();
+
+                    let items = data.items;
+                    let dataObjectList = [];
+                    for(let item in items) {
+                        dataObjectList.push({
+                            key: item,
+                            data: items[item]
+                        });
+                    }
+                    let selectOptions = this.state.selectOptions;
+                    selectOptions[dataObject] = dataObjectList;
+                    this.setState({
+                        selectOptions: selectOptions
+                    });
+                });
+            }
         }
     }
     
-
-    getListItems(){
+    setListItems(){
         let formData = this.state.formData;
         let formElements = this.props.formElements;
         for(let key in formElements) {
@@ -43,8 +73,9 @@ class AdminForm extends Component {
 
         if(prevProps.formElements !== this.props.formElements) {
             if(!this.props.activeCar) {
-                this.getListItems();
+                this.setListItems();
             }
+            this.setSelectOptions();
         }
 
     }
@@ -133,6 +164,20 @@ class AdminForm extends Component {
                         </div>
                     );
                 }
+                break;
+            case "dataObject":
+                let dataObject = formElement.dataObject;
+                let dataObjects = this.state.selectOptions[dataObject] || [];
+                return (
+                    <select name={key} key={i} value={this.state.formData[key] || ""} onChange={e => this.handleFieldChange(e, key)}>
+                        <option value="" disabled hidden>Select an option</option>
+                        {dataObjects.map((item, i) => {
+                            return (
+                                <option key={i} value={item.key}>{item.data.title}</option>
+                            );
+                        })}
+                    </select>
+                );
                 break;
         }
     }

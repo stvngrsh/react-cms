@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import AdminTable from '../components/adminTable/AdminTable';
 import AdminForm from '../components/adminForm/AdminForm';
 
-class Admin extends Component {
+class AdminEdit extends Component {
 
     constructor(props, context) {
         super(props, context);
@@ -110,4 +110,4 @@ class Admin extends Component {
     }
 }
 
-export default Admin;
+export default AdminEdit;
