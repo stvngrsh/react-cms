@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './style.scss';
 import firebase from '../../firebase';
 
+const storageRef = firebase.storage().ref();
+
 class AdminForm extends Component {
 
     constructor(props, context) {
@@ -179,6 +181,45 @@ class AdminForm extends Component {
                     </select>
                 );
                 break;
+            case "imageSelect":
+                return (
+                    <input name="filesss" type="file" onChange={this.handleImageSelect}/>
+                );
+        }
+    }
+
+    handleImageSelect = (e) => {
+        console.log('e :', e);
+        const reader = new FileReader();
+        const file = e.target.files[0];
+
+        reader.onload = (upload) => {
+            this.setState({
+                file: {
+                    data_uri: upload.target.result,
+                    file: file
+                }
+            });
+        }
+
+        reader.readAsDataURL(file);
+    }
+
+    handleSubmit = (e, formData) => {
+        console.log('formData :', formData);
+        e.preventDefault();
+        if(this.state.file) {
+            let imageRef = storageRef.child('cars/' + this.state.file.file.name);
+            console.log("Uploading file");
+            imageRef.put(this.state.file.file).then((snapshot) => {
+                console.log('Snapshot :', snapshot);
+                let images = [];
+                images.push(snapshot.metadata.name);
+                this.props.submitForm(e, formData, images);
+
+            });
+        } else {
+            this.props.submitForm(e, formData, []);
         }
     }
     
@@ -197,7 +238,7 @@ class AdminForm extends Component {
                         </label>
                     );
                 })}
-                <button onClick={e => this.props.submitForm(e, this.state.formData)}>{this.props.activeCar ? "Update Car" : "Add New Car"}</button>
+                <button onClick={e => this.handleSubmit(e, this.state.formData)}>{this.props.activeCar ? "Update Car" : "Add New Car"}</button>
                 </form>
             </div>
         );

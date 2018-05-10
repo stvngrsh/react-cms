@@ -1,0 +1,42 @@
+@import '../../global-styles';
+
+.Header {
+
+    .space-between {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .top-nav {
+        height: 60px;
+        background-color: $dark-blue;
+        color: white;
+        
+        .left {
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .logo {
+                height: 80%;
+                margin-right: 15px;
+            }
+        }
+            
+    }
+    .bottom-nav {
+        background-color: $light-gray;
+        
+        ul {
+            padding: 10px 0;
+            color: $dark-blue;
+            margin: 0;
+
+            list-style-type: none;
+            li {
+
+            }
+        }
+    }
+}

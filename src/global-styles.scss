@@ -1,0 +1,26 @@
+$red: #BA1201;
+$dark-blue: #031927;
+$light-blue: #9DD1F1;
+$light-gray: #D1D1D1;
+$medium-gray: #979797;
+$dark-grey: #3E4A57;
+$green: #69995D;
+
+html, body, #root {
+    position: relative;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: black;
+    background-color: $light-gray;
+    border: 1px solid $medium-gray;
+}
+
+.container {
+    height: 100%;
+    max-width: 1200px;
+    margin: auto;
+}

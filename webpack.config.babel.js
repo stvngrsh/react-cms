@@ -27,8 +27,26 @@ module.exports = {
                     use: ["css-loader", "sass-loader"]
                 })
             },
-            { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
-            { test: /\.(ttf|eot)$/, loader: 'file' }
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader?mimetype=image/svg+xml'
+            },
+            {
+                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader?mimetype=application/font-woff'
+            },
+            {
+                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader?mimetype=application/font-woff'
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader?mimetype=application/octet-stream'
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader'
+            }
         ]
     },
     resolve: {

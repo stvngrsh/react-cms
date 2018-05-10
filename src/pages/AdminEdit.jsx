@@ -41,12 +41,13 @@ class AdminEdit extends Component {
         });
     }
 
-    submitForm = (e, formData) => {
+    submitForm = (e, formData, images) => {
         console.log(formData);
         e.preventDefault();
         if(this.state.activeCar) {
             firebase.database().ref('data-objects/cars/items/' + this.state.activeCar.id).update({
-                data: formData
+                data: formData,
+                images: images
             }, err => {
                 if(err) {
                     console.error(err);
@@ -57,7 +58,8 @@ class AdminEdit extends Component {
         } else {
             firebase.database().ref('data-objects/cars/items').push({
                 active: true,
-                data: formData
+                data: formData,
+                images: images
             }, err => {
                 if(err) {
                     console.error(err);
