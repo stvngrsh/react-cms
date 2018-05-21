@@ -1,5 +1,37 @@
-.CarTile {
-    .background-image {
+@import '../../global-styles';
 
+.CarTile {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+
+    .outer-image {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .inner-image {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+    }
+
+    .tile-banner {
+        background: $light-gray;
+        background: linear-gradient(90deg, $light-gray, $light-gray 70%, rgba(0,0,0,0) 100%);
+        height: 40px;
+        width: 100%;
+        z-index: 1;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+
+        h3 {
+            margin: 0;
+        }
     }
 }

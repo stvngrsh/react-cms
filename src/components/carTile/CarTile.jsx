@@ -41,10 +41,12 @@ class CarTile extends Component {
         let car = this.props.car;
         return (
             <div className="CarTile">
-                <img className="background-image"/>
                 <div className="tile-banner">
-                    <img className="flag" src={this.state.imageUrl} />
+                    <img className="flag"  />
                     <h3><b>{car.data.make}</b> {car.data.model}</h3>
+                </div>
+                <div className="outer-image">
+                    <img className="inner-image" src={this.state.imageUrl}/>
                 </div>
             </div>
         );

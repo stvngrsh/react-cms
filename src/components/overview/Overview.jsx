@@ -13,11 +13,11 @@ class Overview extends Component {
     }
     
     componentDidUpdate(prevProps, prevState) {
-        let carData = this.props.carData;
+        let car = this.props.car;
         let logos = this.props.logos;
 
-        if(Object.keys(carData).length && Object.keys(logos).length && this.state.logo === prevState.logo) {
-            let logoImg = this.props.logos[this.props.carData.make];
+        if(Object.keys(car).length && Object.keys(logos).length && this.state.logo === prevState.logo) {
+            let logoImg = this.props.logos[this.props.car.data.make];
             let image = storageRef.child(logoImg).getDownloadURL();
             image.then(url => {
                 this.setState({
@@ -30,21 +30,23 @@ class Overview extends Component {
     
     render() {
         let logo = this.state.logo;
-        let carData = this.props.carData;
-        return (
-            <div className="Overview">
-                <img src={ logo } />
-                <div>{ carData.year }<span> { carData.make }</span></div>
-                <div>{ carData.model }</div>
-                <div>{ carData.detail }</div>
-            </div>
-        );
+        if(this.props.car.data) {
+            let carData = this.props.car;
+            return (
+                <div className="Overview">
+                    <img src={ logo } />
+                    <div>{ carData.year }<span> { carData.make }</span></div>
+                    <div>{ carData.model }</div>
+                    <div>{ carData.detail }</div>
+                </div>
+            );
+        }
     }
     
 }
 
 Overview.defaultProps = {
-    carData: {},
+    car: {},
     logos: {}
 }
 

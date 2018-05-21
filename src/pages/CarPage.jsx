@@ -10,7 +10,7 @@ class CarPage extends Component {
         super();
         this.state = {
             carId: "",
-            carData: {},
+            car: {},
             logos: {}
         }
     }
@@ -21,9 +21,10 @@ class CarPage extends Component {
         carData.on('value', (snapshot) => {
             let data = snapshot.val();
             if(data) {
+                console.log('data :', data);
                 this.setState({
                     carId: carId,
-                    carData: data
+                    car: data
                 })
             }
         });
@@ -40,9 +41,9 @@ class CarPage extends Component {
     render() {
         return (
             <div>
-                <Overview carData={this.state.carData} logos={this.state.logos}/>
-                <GetQuote carData={this.state.carData} url={this.props.match.url}/>
-                <ImageGallery carData={this.state.carData} carId={this.state.carId} />
+                <Overview car={this.state.car} logos={this.state.logos}/>
+                <GetQuote car={this.state.car} url={this.props.match.url}/>
+                <ImageGallery car={this.state.car} carId={this.state.carId} />
             </div>
         );
     }

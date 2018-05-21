@@ -2,5 +2,7 @@
     ul {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
+        grid-gap: 10px;
+        list-style-type: none;
     }
 }
