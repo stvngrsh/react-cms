@@ -17,7 +17,6 @@ class Footer extends Component {
     componentDidMount() {
         let imageRef = firebase.storage().ref().child('logo-black.png').getDownloadURL();
         imageRef.then(url => {
-            console.log('url :', url);
             this.setState({logoImage: url});
         })
     }

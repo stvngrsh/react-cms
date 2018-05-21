@@ -10,6 +10,10 @@ html, body, #root {
     position: relative;
 }
 
+body {
+    margin: 0;
+}
+
 .btn {
     border-radius: 8px;
     padding: 10px 20px;

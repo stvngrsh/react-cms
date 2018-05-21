@@ -40,7 +40,6 @@ class GetQuote extends Component {
     }
 
     openForm = e => {
-        console.log('this.propsss :', this.props);
         if(this.props.carData) {
             let subject = "Car Inquiry: " + this.props.carData.year + " " + this.props.carData.make + " " + this.props.carData.model;
             this.setState({
@@ -79,7 +78,6 @@ class GetQuote extends Component {
     }
 
     render() {
-        console.log('this.state.formOpen :', this.state.formOpen);
         return (
             <div className="GetQuote">
                 <button onClick={this.openForm} >Contact Us</button>

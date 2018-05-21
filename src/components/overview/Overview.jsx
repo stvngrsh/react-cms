@@ -29,7 +29,6 @@ class Overview extends Component {
         
     
     render() {
-        console.log('this.props.carData :', this.props.carData);
         let logo = this.state.logo;
         let carData = this.props.carData;
         return (

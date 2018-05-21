@@ -14,7 +14,6 @@ class Header extends Component {
     componentDidMount() {
         let imageRef = firebase.storage().ref().child('logo-white.png').getDownloadURL();
         imageRef.then(url => {
-            console.log('url :', url);
             this.setState({logoImage: url});
         })
     }

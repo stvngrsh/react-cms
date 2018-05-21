@@ -41,11 +41,22 @@ class AdminEdit extends Component {
         });
     }
 
-    submitForm = (e, formData, images) => {
-        console.log(formData);
+    submitForm = (e, formData, images, key) => {
         e.preventDefault();
         if(this.state.activeCar) {
             firebase.database().ref('data-objects/cars/items/' + this.state.activeCar.id).update({
+                data: formData,
+                images: images
+            }, err => {
+                if(err) {
+                    console.error(err);
+                } else {
+                    this.closeForm();
+                }
+            });
+        } else if (key) {
+            firebase.database().ref('data-objects/cars/items/' + key).update({
+                active: true,
                 data: formData,
                 images: images
             }, err => {

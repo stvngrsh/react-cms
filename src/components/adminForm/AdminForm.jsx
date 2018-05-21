@@ -71,7 +71,6 @@ class AdminForm extends Component {
     }
     
     componentDidUpdate(prevProps, prevState) {
-        console.log('this.state :', this.state);
 
         if(prevProps.formElements !== this.props.formElements) {
             if(!this.props.activeCar) {
@@ -189,7 +188,6 @@ class AdminForm extends Component {
     }
 
     handleImageSelect = (e) => {
-        console.log('e :', e);
         const reader = new FileReader();
         const file = e.target.files[0];
 
@@ -206,16 +204,20 @@ class AdminForm extends Component {
     }
 
     handleSubmit = (e, formData) => {
-        console.log('formData :', formData);
         e.preventDefault();
         if(this.state.file) {
-            let imageRef = storageRef.child('cars/' + this.state.file.file.name);
-            console.log("Uploading file");
+            let key = "";
+            if(this.props.activeCar) {
+                key = this.props.activeCar.id;
+            } else {
+                key = firebase.database().ref('data-objects/cars/items').push();
+            }
+            let imageRef = storageRef.child('cars/' + key + '/' + this.state.file.file.name);
             imageRef.put(this.state.file.file).then((snapshot) => {
-                console.log('Snapshot :', snapshot);
                 let images = [];
                 images.push(snapshot.metadata.name);
-                this.props.submitForm(e, formData, images);
+
+                this.props.submitForm(e, formData, images, key);
 
             });
         } else {

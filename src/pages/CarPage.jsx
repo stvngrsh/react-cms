@@ -17,11 +17,9 @@ class CarPage extends Component {
 
     componentDidMount() {
         let carId = this.props.match.params.carId;
-        console.log('carId :', carId);
         const carData = firebase.database().ref('data-objects/cars/items/' + carId);
         carData.on('value', (snapshot) => {
             let data = snapshot.val();
-            console.log('data :', data);
             if(data) {
                 this.setState({
                     carId: carId,
@@ -40,7 +38,6 @@ class CarPage extends Component {
     }
     
     render() {
-        console.log('this.state :', this.state);
         return (
             <div>
                 <Overview carData={this.state.carData} logos={this.state.logos}/>

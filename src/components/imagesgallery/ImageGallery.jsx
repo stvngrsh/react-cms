@@ -28,7 +28,6 @@ class ImageGallery extends Component {
     }
 
     render() {
-        console.log('this.state.images :', this.state.images);
         let images = this.state.images.sort();
         return (
             <div className="ImageGallery">

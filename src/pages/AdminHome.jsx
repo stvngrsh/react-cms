@@ -16,7 +16,6 @@ class AdminHome extends Component {
         const dataObjects = firebase.database().ref('data-objects');
         dataObjects.on('value', (snapshot) => {
             let data = snapshot.val();
-            console.log('data :', data);
             let newDataObjects = [];
             for(let item in data) {
                 newDataObjects.push({
@@ -33,7 +32,6 @@ class AdminHome extends Component {
 
     render() {
         let dataObjects = this.state.dataObjects || [];
-        console.log('dataObjects :', dataObjects);
         return (
             <div>
                 <ul>
