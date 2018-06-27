@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 class AdminTable extends PureComponent {
     render() {
+        console.log('this.props.cars :', this.props.cars);
         return (
             <div className="AdminTable">
                 <h1>Car Database:</h1>
@@ -28,6 +29,7 @@ class AdminTable extends PureComponent {
                         );
                     })}
                 </tbody></table>
+                {this.props.cars.length > 0 || <h3>There are no entries. Please add one below.</h3>}
                 <button onClick={e => this.props.addCar(e)}>Add New Car</button>
             </div>
         );

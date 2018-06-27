@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import firebase from '../firebase';
 import { Link } from 'react-router-dom';
+import { firestore } from '../firebase';
+import { arrayPush } from '../Utils';
 
 class AdminHome extends Component {
 
@@ -13,18 +14,13 @@ class AdminHome extends Component {
     }
 
     componentDidMount() {
-        const dataObjects = firebase.database().ref('data-objects');
-        dataObjects.on('value', (snapshot) => {
-            let data = snapshot.val();
-            let newDataObjects = [];
-            for(let item in data) {
-                newDataObjects.push({
-                    id: item,
-                    title: data[item].title
-                });
-            }
+        firestore.collection('data-objects').get().then(querySnapshot => {
+            let dataObjects = [];
+            querySnapshot.forEach(doc => {
+                arrayPush(doc, dataObjects);
+            });
             this.setState({
-                dataObjects: newDataObjects
+                dataObjects: dataObjects
             });
         });
     }

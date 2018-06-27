@@ -1,4 +1,7 @@
-import firebase from 'firebase';
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/storage');
+
 
 const config = {
     apiKey: "AIzaSyD_-WuAKVEiAAYWONuF1MEruIw-osVidVY",
@@ -10,4 +13,15 @@ const config = {
 };
 firebase.initializeApp(config);
 
-export default firebase;
+const firestore = firebase.firestore();
+const settings = {
+    timestampsInSnapshots: true
+}
+firestore.settings(settings);
+
+const carsData = firestore.collection('data-objects').doc('cars');
+
+const storage = firebase.storage();
+const images = storage.ref('images');
+
+export {images, firestore, carsData};

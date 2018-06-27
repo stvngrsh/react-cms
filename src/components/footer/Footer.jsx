@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './style.scss';
-import firebase from '../../firebase';
 import { Link } from 'react-router-dom';
 
 class Footer extends Component {
@@ -15,10 +14,10 @@ class Footer extends Component {
     
      
     componentDidMount() {
-        let imageRef = firebase.storage().ref().child('logo-black.png').getDownloadURL();
-        imageRef.then(url => {
-            this.setState({logoImage: url});
-        })
+        // let imageRef = firebase.storage().ref().child('logo-black.png').getDownloadURL();
+        // imageRef.then(url => {
+        //     this.setState({logoImage: url});
+        // })
     }
 
     render() {

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './style.scss';
-import firebase from '../../firebase';
-
-const storageRef = firebase.storage().ref();
+import ImageUpload from '../imageUpload/ImageUpload';
 
 class AdminForm extends Component {
 
@@ -182,47 +180,14 @@ class AdminForm extends Component {
                 break;
             case "imageSelect":
                 return (
-                    <input name="filesss" type="file" onChange={this.handleImageSelect}/>
+                    <ImageUpload />
                 );
         }
     }
 
-    handleImageSelect = (e) => {
-        const reader = new FileReader();
-        const file = e.target.files[0];
-
-        reader.onload = (upload) => {
-            this.setState({
-                file: {
-                    data_uri: upload.target.result,
-                    file: file
-                }
-            });
-        }
-
-        reader.readAsDataURL(file);
-    }
-
     handleSubmit = (e, formData) => {
         e.preventDefault();
-        if(this.state.file) {
-            let key = "";
-            if(this.props.activeCar) {
-                key = this.props.activeCar.id;
-            } else {
-                key = firebase.database().ref('data-objects/cars/items').push();
-            }
-            let imageRef = storageRef.child('cars/' + key + '/' + this.state.file.file.name);
-            imageRef.put(this.state.file.file).then((snapshot) => {
-                let images = [];
-                images.push(snapshot.metadata.name);
-
-                this.props.submitForm(e, formData, images, key);
-
-            });
-        } else {
-            this.props.submitForm(e, formData, []);
-        }
+        this.props.submitForm(e, formData, []);
     }
     
     render() {
@@ -233,11 +198,12 @@ class AdminForm extends Component {
                 <button onClick={this.props.closeForm}>Cancel</button>
                 <form>
                 {formKeys.map((key, i) => {
+                    let Tag = formElements[key].type === 'imageSelect' ? `div` : `label`;
                     return (
-                        <label key={i}>
+                        <Tag key={i}>
                             {formElements[key].title}
                             {this.renderFormElement(key, formElements[key], i)}
-                        </label>
+                        </Tag>
                     );
                 })}
                 <button onClick={e => this.handleSubmit(e, this.state.formData)}>{this.props.activeCar ? "Update Car" : "Add New Car"}</button>

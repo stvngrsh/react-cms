@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './style.scss';
 import { Link } from 'react-router-dom';
-import firebase from '../../firebase';
 
 class Header extends Component {
     constructor(props, context) {
@@ -12,10 +11,10 @@ class Header extends Component {
     }
     
     componentDidMount() {
-        let imageRef = firebase.storage().ref().child('logo-white.png').getDownloadURL();
-        imageRef.then(url => {
-            this.setState({logoImage: url});
-        })
+        // // let imageRef = firebase.storage().ref().child('logo-white.png').getDownloadURL();
+        // imageRef.then(url => {
+        //     this.setState({logoImage: url});
+        // })
     }
     
     render() {

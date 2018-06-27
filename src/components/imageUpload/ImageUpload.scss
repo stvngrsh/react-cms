@@ -1,0 +1,27 @@
+.ImageUpload {
+    .thumbnails {
+        display: flex;
+        flex-direction: row;
+        .thumbnail {
+            margin-left: 10px;
+            img {
+                width: 120px;
+                height: auto;
+            }
+        }
+    }
+
+    .drop-target {
+        border-color: black;
+        border-style: solid;
+        border-radius: 5px;
+        width: 400px;
+
+        &.active {
+            border-color: green;
+        }
+        &.reject {
+            border-color: red;
+        }
+    }
+}

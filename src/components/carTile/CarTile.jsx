@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import firebase from '../../firebase';
 import './style.scss';
 
 class CarTile extends Component {
@@ -29,12 +28,14 @@ class CarTile extends Component {
     }
     
     getImage() {
-        let car = this.props.car;
-        let path = this.getPath(car.id, car.images[0]);
-        let imageRef = firebase.storage().ref().child(path).getDownloadURL();
-        imageRef.then(url => {
-            this.setState({ imageUrl: url });
-        });
+        // let car = this.props.car;
+        // if(car.images && car.images.length) {
+        //     let path = this.getPath(car.id, car.images[0]);
+        //     let imageRef = firebase.storage().ref().child(path).getDownloadURL();
+        //     imageRef.then(url => {
+        //         this.setState({ imageUrl: url });
+        //     });
+        // }
     }
 
     render() {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import firebase from '../firebase';
 import { Link } from 'react-router-dom';
 import CarTile from '../components/carTile/CarTile';
 import CarList from '../components/carList/CarList';
+import {carsData} from '../firebase';
 
 class CarGallery extends Component {
 
@@ -15,18 +15,14 @@ class CarGallery extends Component {
     }
     
     componentDidMount() {
-        const carData = firebase.database().ref('data-objects/cars/items');
-        carData.on('value', (snapshot) => {
-            let data = snapshot.val();
-            let newState = [];
-            for(let item in data) {
-                let newCar = data[item];
-                newCar.id = item;
-                newState.push(newCar);
-            }
-            this.setState({
-                cars: newState
+        console.log('carsData :', carsData);
+        carsData.collection('items').get().then(querySnapshot => {
+            let cars = [];
+            querySnapshot.forEach(doc => {
+                console.log(doc.id, " => ", doc.data());
             });
+        }).catch(error => {
+            console.log("Error getting document:", error);
         });
     }
 
