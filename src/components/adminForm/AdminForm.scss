@@ -1,0 +1,27 @@
+.AdminForm {
+    .thumbnails {
+        display: flex;
+        flex-direction: row;
+        .delete {
+            position: absolute;
+            border-radius: 100%;
+            width: 20px;
+            height: 20px;
+        }
+        .thumbnail {
+            margin-left: 10px;
+            img {
+                width: 120px;
+                height: auto;
+            }
+        }
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            margin-bottom: 15px;
+        }
+    }
+}

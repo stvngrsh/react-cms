@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './style.scss';
+import './AdminForm.scss';
 import ImageUpload from '../imageUpload/ImageUpload';
 
 class AdminForm extends Component {
@@ -9,13 +9,18 @@ class AdminForm extends Component {
         
         this.state = {
             formData: {},
-            selectOptions: {}
+            images: [],
+            selectOptions: {},
+            files: []
         }
     }
 
     componentDidMount() {
         if(this.props.activeCar) {
-            this.setState({formData: this.props.activeCar.data});
+            this.setState({
+                formData: this.props.activeCar.data,
+                images: this.props.activeCar.images,
+            });
         } else {
             this.setListItems();
         }
@@ -180,14 +185,60 @@ class AdminForm extends Component {
                 break;
             case "imageSelect":
                 return (
-                    <ImageUpload />
+                    <div>
+                        <div className="thumbnails">
+                            <h2>Current Images:</h2>
+                            {this.state.images && this.state.images.map((image, i) => {
+                                return (
+                                    <div className="thumbnail" key={i}>
+                                        <button className="delete" onClick={e => this.removeImage(e, i)} >X</button>
+                                        <img src={image.url} />
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <ImageUpload updateImages={this.updateImages} files={this.state.files}/>
+                    </div>
                 );
+                break;
         }
+    }
+
+    removeImage = (e, i) => {
+        e.preventDefault();
+        let {images} = this.state;
+        images.splice(i, 1);
+        this.setState({images: images});
+    }
+
+    updateImages = (files) => {
+        if(!files) {
+            files = [];
+        }
+        this.setState({
+            files: files
+        });
     }
 
     handleSubmit = (e, formData) => {
         e.preventDefault();
-        this.props.submitForm(e, formData, []);
+
+        let allowSubmit = true;
+        for(let file of this.state.files) {
+            console.log('file :', file);
+            if(file.isUploading) {
+                allowSubmit = false;
+                alert("Please allow files to finish uploading;");
+                break;
+            }
+        }
+        let images = this.state.images;
+        for(let file of this.state.files) {
+            images.push({url: file.url});
+        }
+        if(allowSubmit) {
+            this.props.submitForm(e, formData, images);
+        }
     }
     
     render() {

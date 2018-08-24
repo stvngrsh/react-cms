@@ -8,9 +8,6 @@ class ImageUpload extends Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = {
-            files: []
-        };
     }
 
     onDrop = (acceptedFiles, rejectedFiles) => {
@@ -35,7 +32,7 @@ class ImageUpload extends Component {
 
     handleUploadStart = (file, task) => {
         console.log('UPLOAD START :', file, task);
-        let {files} = this.state;
+        let {files} = this.props;
         let fileObj = {
             file: file,
             isUploading: true,
@@ -45,45 +42,45 @@ class ImageUpload extends Component {
             taskId: task.snapshot.ref.fullPath
         }
         files.push(fileObj);
-        this.setState({files: files});
+        this.props.updateImages(files);
     }
 
     handleProgress = (progress, task) => {
         console.log('ON PROGRESS :', progress, task);
-        let {files} = this.state;
+        let {files} = this.props || [];
         files.forEach((fileObj, index, arr) => {
             if(fileObj.taskId === task.snapshot.ref.fullPath) {
                 arr[index].progress = progress;
             }
         });
-        this.setState({files: files});
+        this.props.updateImages(files);
     }
 
     handleUploadError = (error, task) => {
         console.log('ON ERROR :', error, task);
 
-        let {files} = this.state;
+        let {files} = this.props || [];
         files.forEach((fileObj, index, arr) => {
             if(fileObj.taskId === task.snapshot.ref.fullPath) {
                 arr[index].uploadError = true;
                 arr[index].isUploading = false;
             }
         });
-        this.setState({files: files});
+        this.props.updateImages(files);
         console.error(error);
     }
 
     handleUploadSuccess = (filename, task) => {
         console.log('ON SUCCESS :', filename, task);
 
-        let {files} = this.state;
+        let {files} = this.props;
         files.forEach((fileObj, index, arr) => {
             if(fileObj.taskId === task.snapshot.ref.fullPath) {
                 arr[index].progress = 100;
                 arr[index].isUploading = false;
                 images.child(filename).getDownloadURL().then(url => {
                     arr[index].url = url;
-                    this.setState({files: files });
+                    this.props.updateImages(files);
                 });
             }
         });
@@ -96,7 +93,7 @@ class ImageUpload extends Component {
                     <h4>Drag an image file here to upload</h4>
                 </Dropzone>
                 <div className="thumbnails">
-                    {this.state.files.map((image, i) => {
+                    {this.props.files.map((image, i) => {
                         return (
                             <div className="thumbnail" key={i}>
                                 <h3>{image.file.name}</h3>
@@ -127,6 +124,10 @@ class ImageUpload extends Component {
             </div>
         );
     }
+}
+
+ImageUpload.defaultProps = {
+    files: []
 }
 
 export default ImageUpload;

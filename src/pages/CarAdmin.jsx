@@ -79,9 +79,11 @@ class CarAdmin extends Component {
 
     submitForm = (e, formData, images) => {
         e.preventDefault();
+
         if(this.state.activeCar) {
             carsData.collection('items').doc(this.state.activeCar.id).update({
-                data: formData
+                data: formData,
+                images: images
             }).then(() => {
                 console.log("Document successfully updated!");
                 this.closeForm();
@@ -92,7 +94,8 @@ class CarAdmin extends Component {
         } else {
             carsData.collection('items').add({
                 active: true,
-                data: formData
+                data: formData,
+                images: images
             }).then(() => {
                 console.log("Document successfully updated!");
                 this.closeForm();
